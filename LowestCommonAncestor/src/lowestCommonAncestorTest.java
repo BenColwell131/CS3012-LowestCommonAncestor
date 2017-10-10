@@ -25,15 +25,15 @@ public class lowestCommonAncestorTest {
 	             "()", bst.printTree());
 	     
 	     //Testing printing of a one node tree.
-	     bst.put('B', 'B');
+	     bst.insert('B', 'B');
 	     assertEquals("Testing printing of one node tree",
 	             "(()B())", bst.printTree());
 	     
 	     
 	     //Testing printing of a multiple node tree/
-	     bst.put('A', 'A');
-	     bst.put('C', 'C');
-	     bst.put('D', 'D');
+	     bst.insert('A', 'A');
+	     bst.insert('C', 'C');
+	     bst.insert('D', 'D');
 	     
 	     assertEquals("Testing printing of multiple node tree",
 	    		 "((()A())B(()C(()D())))", bst.printTree());	     
@@ -69,7 +69,7 @@ public class lowestCommonAncestorTest {
 		//Testing update of value in tree.
 		bst.insert('C', 'X');
 		assertEquals("Testing insert of multiple nodes into tree", 
-				"((()A())B(()X(()D())))", bst.printTree());
+				'X', (char)bst.get('C'));
 		
 		//Testing insert of null value. (Should delete node)
 		bst.insert('C', null);
@@ -86,16 +86,15 @@ public class lowestCommonAncestorTest {
 	@Test
 	public void testGet(){
 		BST<Character, Character> bst = new BST<Character, Character>();
-//TODO
+		
 		assertNull("Testing get on empty tree", 
 				bst.get('A'));
 	     
-	     bst.put('B', 'B');
-	     bst.put('C', 'C');
-	     bst.put('D', 'D');
-	     bst.put('E', 'E');
+	     bst.insert('B', 'B');
+	     bst.insert('C', 'C');
+	     bst.insert('D', 'D');
+	     bst.insert('E', 'E');
 	     
-//TODO
 	     assertNull("Testing get on multiple node tree that doesn't contain key",
 	             bst.get('A'));   
 	     
@@ -114,14 +113,14 @@ public class lowestCommonAncestorTest {
         assertEquals("Deleting from empty tree", "()", bst.printTree());
         
         
-        bst.put(7, 7);   //        _7_
-        bst.put(8, 8);   //      /     \
-        bst.put(3, 3);   //    _3_      8
-        bst.put(1, 1);   //  /     \
-        bst.put(2, 2);   // 1       6
-        bst.put(6, 6);   //  \     /
-        bst.put(4, 4);   //   2   4
-        bst.put(5, 5);   //        \
+        bst.insert(7, 7);   //        _7_
+        bst.insert(8, 8);   //      /     \
+        bst.insert(3, 3);   //    _3_      8
+        bst.insert(1, 1);   //  /     \
+        bst.insert(2, 2);   // 1       6
+        bst.insert(6, 6);   //  \     /
+        bst.insert(4, 4);   //   2   4
+        bst.insert(5, 5);   //        \
                          //         5
         
         assertEquals("Testing constructed tree is as expected.",
@@ -157,33 +156,38 @@ public class lowestCommonAncestorTest {
 		BST<Integer, Integer> bst = new BST<Integer, Integer>();
 		
 		//Testing empty tree.
-		assertNull("Testing LCA on empty tree", bst.testLowestCommonAncestor(1, 2));
+		assertNull("Testing LCA on empty tree", bst.lowestCommonAncestor(1, 2));
 		
 		//Testing one-node tree.
-		bst.put(1,1);
+		bst.insert(1,1);
 		
-		//If either given key is the root, should return the root
-		assertEquals("Testing one node tree given root key", 1, bst.lowestCommonAncestor(1,2));
+		//If given non-present keys - should return null.
 		
-		//If neither key is the root, should return null
+		//One key present.
+		assertNull("Testing one node tree given non-present keys", bst.lowestCommonAncestor(2,1));
+		
+		//Both non-present keys.
 		assertNull("Testing one node tree given non-present keys", bst.lowestCommonAncestor(2,3));
 		
 		//Testing multi-node tree
 		BST<Integer, Integer> bst2 = new BST<Integer, Integer>();
 
-	       	bst2.put(7, 7);   //        _7_
-	        bst2.put(8, 8);   //      /     \
-	        bst2.put(3, 3);   //    _3_      8
-	        bst2.put(1, 1);   //  /     \
-	        bst2.put(2, 2);   // 1       6
-	        bst2.put(6, 6);   //  \     /
-	        bst2.put(4, 4);   //   2   4
-	        bst2.put(5, 5);   //        \
-	                         //         5
+	       	bst2.insert(7, 7);   //        _7_
+	        bst2.insert(8, 8);   //      /     \
+	        bst2.insert(3, 3);   //    _3_      8
+	        bst2.insert(1, 1);   //  /     \
+	        bst2.insert(2, 2);   // 1       6
+	        bst2.insert(6, 6);   //  \     /
+	        bst2.insert(4, 4);   //   2   4
+	        bst2.insert(5, 5);   //        \
+	        					 //         5
 		
-	    assertEquals("Testing multi-node tree", 7, bst2.lowestCommonAncestor(3,8));
-	    assertEquals("Testing multi-node tree", 7, bst2.lowestCommonAncestor(5,8));
-	    assertEquals("Testing multi-node tree", 3, bst2.lowestCommonAncestor(3,6));
-	    assertEquals("Testing multi-node tree", 3, bst2.lowestCommonAncestor(2,5));
+	    //If either given key is the root, should return the root
+		assertEquals("Testing one node tree given root key", 7, (int)bst2.lowestCommonAncestor(7,2));    
+	        
+	    assertEquals("Testing multi-node tree", 7, (int)bst2.lowestCommonAncestor(3,8));
+	    assertEquals("Testing multi-node tree", 7, (int)bst2.lowestCommonAncestor(5,8));
+	    assertEquals("Testing multi-node tree", 3, (int)bst2.lowestCommonAncestor(3,6));
+	    assertEquals("Testing multi-node tree", 3, (int)bst2.lowestCommonAncestor(2,5));
 	}
 }

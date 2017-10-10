@@ -33,9 +33,13 @@ public class BST<Key extends Comparable<Key>, Value> {
         }
     }
     
+
+//TODO Test below function.    
     // is the symbol table empty?
     public boolean isEmpty() { return size() == 0; }
 
+    
+//TODO Test below function.    
     // return number of key-value pairs in BST
     public int size() { return size(root); }   
     
@@ -133,8 +137,9 @@ public class BST<Key extends Comparable<Key>, Value> {
     	
     }
     
-    
-  
+    public void delete(Key key) {
+    	root = delete(root, key);
+    }
     
     private Node delete(Node x, Key key){
     	if(x == null) return null;
@@ -167,3 +172,38 @@ public class BST<Key extends Comparable<Key>, Value> {
     	x.N = 1 + size(x.left) + size(x.right);
     	return x;
     }
+
+//TODO Test below function.
+    //Small function to determine if a key is present in the tree.
+    public boolean contains(Key x){
+    	return(get(x)!=null);
+    }
+    
+    
+    
+    public Key lowestCommonAncestor(Key i, Key j) {
+    	if (root == null){
+			return null;			//If tree is empty return null.
+		}
+    	if(!contains(i) || !contains(j)){
+    		return null;
+    	}
+    	return lowestCommonAncestor(root, i, j);
+    }
+    
+	private Key lowestCommonAncestor(Node x, Key i, Key j) {
+		
+		int cmpI = x.key.compareTo(i);
+		int cmpJ = x.key.compareTo(j);
+		
+		if(cmpI > 0 && cmpJ > 0){
+			return lowestCommonAncestor(x.left, i, j);
+		}
+		else if(cmpI < 0 && cmpJ < 0){
+			return lowestCommonAncestor(x.right, i, j);
+		}
+		else{
+			return x.key;
+		}	
+	}
+}
