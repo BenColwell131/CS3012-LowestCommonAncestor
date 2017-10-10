@@ -6,7 +6,7 @@ public class lowestCommonAncestorTest {
 
 	
 	/* Functions that will be needed:
-	 * new bst
+	 * new bst					Tests written
 	 * insert node 				Tests written
 	 * get node					Tests written
 	 * delete node				Tests written
@@ -87,8 +87,8 @@ public class lowestCommonAncestorTest {
 	public void testGet(){
 		BST<Character, Character> bst = new BST<Character, Character>();
 //TODO
-		assertEquals("Testing get on empty tree", 
-				null, bst.get('A'));
+		assertNull("Testing get on empty tree", 
+				bst.get('A'));
 	     
 	     bst.put('B', 'B');
 	     bst.put('C', 'C');
@@ -96,8 +96,8 @@ public class lowestCommonAncestorTest {
 	     bst.put('E', 'E');
 	     
 //TODO
-	     assertEquals("Testing get on multiple node tree that doesn't contain key",
-	             null, bst.get('A'));   
+	     assertNull("Testing get on multiple node tree that doesn't contain key",
+	             bst.get('A'));   
 	     
 
 	     assertEquals("Testing get on multiple node tree that does contain key",
@@ -151,23 +151,39 @@ public class lowestCommonAncestorTest {
 	
 	@Test
 	public void testLowestCommonAncestor(){
-		//Lowest Common Ancestor should require two keys and return a node.
-		//Not sure if we'll be able to access nodes once code is written but assuming for now we can.
+		//Lowest Common Ancestor should require two keys and return key of LCA. We then can use 
+		
 		
 		BST<Integer, Integer> bst = new BST<Integer, Integer>();
 		
 		//Testing empty tree.
-//TODO
-		assertEquals("Testing LCA on empty tree", null, bst.testLowestCommonAncestor(//TODO));
+		assertNull("Testing LCA on empty tree", bst.testLowestCommonAncestor(1, 2));
 		
-		
-/*		Node testNode = new Node(2, 2, 3); //Node(key, value, N) where N is the number of nodes in its subtree.
-		
+		//Testing one-node tree.
 		bst.put(1,1);
-		bst.put(3,3);
-		bst.put(2,2);
-*/		
 		
+		//If either given key is the root, should return the root
+		assertEquals("Testing one node tree given root key", 1, bst.lowestCommonAncestor(1,2));
 		
+		//If neither key is the root, should return null
+		assertNull("Testing one node tree given non-present keys", bst.lowestCommonAncestor(2,3));
+		
+		//Testing multi-node tree
+		BST<Integer, Integer> bst2 = new BST<Integer, Integer>();
+
+	       	bst2.put(7, 7);   //        _7_
+	        bst2.put(8, 8);   //      /     \
+	        bst2.put(3, 3);   //    _3_      8
+	        bst2.put(1, 1);   //  /     \
+	        bst2.put(2, 2);   // 1       6
+	        bst2.put(6, 6);   //  \     /
+	        bst2.put(4, 4);   //   2   4
+	        bst2.put(5, 5);   //        \
+	                         //         5
+		
+	    assertEquals("Testing multi-node tree", 7, bst2.lowestCommonAncestor(3,8));
+	    assertEquals("Testing multi-node tree", 7, bst2.lowestCommonAncestor(5,8));
+	    assertEquals("Testing multi-node tree", 3, bst2.lowestCommonAncestor(3,6));
+	    assertEquals("Testing multi-node tree", 3, bst2.lowestCommonAncestor(2,5));
 	}
 }
