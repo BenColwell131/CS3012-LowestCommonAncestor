@@ -5,16 +5,6 @@ import org.junit.Test;
 public class lowestCommonAncestorTest {
 
 	
-	/* Functions that will be needed:
-	 * new bst					Tests written
-	 * insert node 				Tests written
-	 * get node					Tests written
-	 * delete node				Tests written
-	 * lowestCommonAncestor
-	 * printTree				Tests written
-	 * (size?)
-	 * (isEmpty?)
-	 */
 	
 	@Test
 	public void testPrintTree()
@@ -80,7 +70,7 @@ public class lowestCommonAncestorTest {
 		bst.insert(null, 'Q');
 		assertEquals("Testing insert of null key into tree", 
 				"((()A())B(()D()))", bst.printTree());
-
+		
 	}
 	
 	@Test
@@ -102,6 +92,8 @@ public class lowestCommonAncestorTest {
 	     assertEquals("Testing get on multiple node tree that does contain key",
 	             'C', (char)bst.get('C'));   //Have to cast to char as will return type of 'Value'.
 	     
+	     assertNull("Testing null get", bst.get(null));
+	      
 	}	
 	
 	@Test
@@ -121,7 +113,7 @@ public class lowestCommonAncestorTest {
         bst.insert(6, 6);   //  \     /
         bst.insert(4, 4);   //   2   4
         bst.insert(5, 5);   //        \
-                         //         5
+        					//         5
         
         assertEquals("Testing constructed tree is as expected.",
                 "(((()1(()2()))3((()4(()5()))6()))7(()8()))", bst.printTree());
@@ -131,6 +123,10 @@ public class lowestCommonAncestorTest {
         assertEquals("Deleting non-existent key",
                 "(((()1(()2()))3((()4(()5()))6()))7(()8()))", bst.printTree());
 
+        //Test deleting null key. Should have no effect.
+        bst.delete(null);
+        assertEquals("Deleting non-existent key",
+                "(((()1(()2()))3((()4(()5()))6()))7(()8()))", bst.printTree());
         
         //Test deleting leaf.
         bst.delete(8);
@@ -189,5 +185,50 @@ public class lowestCommonAncestorTest {
 	    assertEquals("Testing multi-node tree", 7, (int)bst2.lowestCommonAncestor(5,8));
 	    assertEquals("Testing multi-node tree", 3, (int)bst2.lowestCommonAncestor(3,6));
 	    assertEquals("Testing multi-node tree", 3, (int)bst2.lowestCommonAncestor(2,5));
+	}
+	
+	@Test
+	public void testIsEmpty(){
+		BST<Integer, Integer> bst = new BST<Integer, Integer>();
+		assertEquals("Testing empty tree", true, bst.isEmpty());
+		
+		bst.insert(1, 1);
+		assertEquals("Testing non-empty tree", false, bst.isEmpty());	
+	}
+	
+	@Test
+	public void testSize(){
+		BST<Integer, Integer> bst = new BST<Integer, Integer>();
+		assertEquals("Testing empty tree", 0, bst.size());
+		
+		bst.insert(1, 1);
+		assertEquals("Testing single node tree", 1, bst.size());
+		
+		bst.insert(2, 2);
+		bst.insert(7, 7);
+		bst.insert(3, 3);
+		bst.insert(99, 99);
+		
+		assertEquals("Testing multi node tree", 5, bst.size());
+	}
+
+	@Test
+	public void testContains(){
+		BST<Integer, Integer> bst = new BST<Integer, Integer>();
+		assertEquals("Testing empty tree", false, bst.contains(4));
+		
+		bst.insert(1, 1);
+		assertEquals("Testing single node tree containing key", true, bst.contains(1));
+		assertEquals("Testing single node tree not containing key", false, bst.contains(5));
+		
+		bst.insert(2, 2);
+		bst.insert(7, 7);
+		bst.insert(3, 3);
+		bst.insert(99, 99);
+		
+		assertEquals("Testing multi node tree containing key", true, bst.contains(99));
+		assertEquals("Testing multi node tree containing key", false, bst.contains(4));
+		
+		assertEquals("Testing contains null. Should return false", false,  bst.contains(null));
 	}
 }

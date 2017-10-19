@@ -56,7 +56,11 @@ public class BST<Key extends Comparable<Key>, Value> {
      *  @param key the search key
      *  @return value associated with the given key if found, or null if no such key exists.
      */
-    public Value get(Key key) { return get(root, key); }
+    public Value get(Key key) { 
+    	
+    	if(key == null) return null;
+    	else return get(root, key); 
+    }
 
     private Value get(Node x, Key key) {
         if (x == null) return null;
@@ -138,7 +142,7 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
     
     public void delete(Key key) {
-    	root = delete(root, key);
+    	if(key!=null) root = delete(root, key);
     }
     
     private Node delete(Node x, Key key){
@@ -173,7 +177,6 @@ public class BST<Key extends Comparable<Key>, Value> {
     	return x;
     }
 
-//TODO Test below function.
     //Small function to determine if a key is present in the tree.
     public boolean contains(Key x){
     	return(get(x)!=null);
