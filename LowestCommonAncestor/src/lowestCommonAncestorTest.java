@@ -241,27 +241,27 @@ public class lowestCommonAncestorTest {
 	// Will also probably need some sort of search class - dfs/topological sort/bfs. 
 	// But this can be private and so should be tested via lca.
 	
-//	@Test
-//	public void testPrintDag(){
-//		dag dag1 = new dag(5);
-//		// Should have vertices 0,1,2,3,4.
-//		
-//		//Not fully sure how it will print - will depend on how I setup the dag obj. But more than likely
-//		//it will be a series of adjacency bags each printed on a line.
-//		
-//		assertEquals("Testing printDag on a no-edge dag", "0: \n1: \n2: \n3: \n4: ", dag.testPrintDag());
-//		
-//		dag1.addEdge(0, 1);
-//		
-//		assertEquals("Testing printDag on a single edge dag", "0: 1.\n1: .\n2: .\n3: .\n4: .", dag.testPrintDag());
-//		
-//		dag1.addEdge(0, 2);
-//		dag1.addEdge(3, 4);
-//		dag1.addEdge(4, 2);
-//		dag1.addEdge(4, 1);
-//		
-//		assertEquals("Testing printDag on a multi-edge dag", "0: 1, 2.\n1: .\n2: .\n3: 4.\n4: 2, 1.", dag.testPrintDag());
-//	}
+	@Test
+	public void testPrintDag(){
+		dag dag1 = new dag(5);
+		// Should have vertices 0,1,2,3,4.
+		
+		//Not fully sure how it will print - will depend on how I setup the dag obj. But more than likely
+		//it will be a series of adjacency bags each printed on a line.
+		
+		assertEquals("Testing printDag on a no-edge dag", "0: \n1: \n2: \n3: \n4: ", dag.testPrintDag());
+		
+		dag1.addEdge(0, 1);
+		
+		assertEquals("Testing printDag on a single edge dag", "0: 1.\n1: .\n2: .\n3: .\n4: .", dag.testPrintDag());
+		
+		dag1.addEdge(0, 2);
+		dag1.addEdge(3, 4);
+		dag1.addEdge(4, 2);
+		dag1.addEdge(4, 1);
+		
+		assertEquals("Testing printDag on a multi-edge dag", "0: 1, 2.\n1: .\n2: .\n3: 4.\n4: 2, 1.", dag.testPrintDag());
+	}
 	
 	@Test
 	public void testAddEdge(){
@@ -311,4 +311,43 @@ public class lowestCommonAncestorTest {
 		
 		assertEquals("Testing multi-edge adj table", testBag, dag1.adj(2));
 	}
+	
+	@Test
+	public void testDagLowestCommonAncestor(){
+		dag testDag1 = new dag(5);
+		
+		testDag1.addEdge(0, 1);
+		testDag1.addEdge(0, 2);
+		testDag1.addEdge(2, 3);
+		testDag1.addEdge(3, 4);
+		
+		Bag<Integer> testBag1 = new Bag<Integer>();
+		testBag1.add(0);
+		
+		assertEquals("Testing single lca return", testBag1, testDag1.lowestCommonAncestor(4, 1));
+		
+		dag testDag2 = new dag(7);
+
+		testDag2.addEdge(0, 3);			
+		testDag2.addEdge(1, 3);
+		testDag2.addEdge(1, 4);
+		testDag2.addEdge(2, 5);
+		testDag2.addEdge(2, 6);
+		testDag2.addEdge(3, 5);
+		testDag2.addEdge(3, 6);
+		testDag2.addEdge(4, 6);
+		
+		Bag<Integer> testBag2 = new Bag<Integer>();
+		testBag2.add(2);
+		testBag2.add(3);
+		
+		assertEquals("Testing multiple lca return", testBag2, testDag2.lowestCommonAncestor(5, 6));
+		
+		Bag<Integer> testBag3 = new Bag<Integer>();
+		
+		//Testing non present vertices input
+		assertEquals("Testing negative input", testBag3, testDag2.lowestCommonAncestor(-2, -1));
+		
+		assertEquals("Testing out of range input", testBag3, testDag2.lowestCommonAncestor(2457, 987));		
+	}	
 }
