@@ -276,5 +276,39 @@ public class lowestCommonAncestorTest {
 		
 		assertEquals("Testing adding an edge from non-existing vertices. Should return false.", false, dag1.addEdge(5, 4));
 		assertEquals("Testing adding an edge from non-existing vertices. Should return false.", false, dag1.addEdge(89, 53));
+		assertEquals("Testing adding an edge from negative vertices. Should return false.", false, dag1.addEdge(-2, -4));
+		
+	}
+	
+	@Test
+	public void testV(){
+		//Not much to test - should return the num of vertices.
+		dag dag1 = new dag(5);
+		assertEquals("Testing V()", 4, dag1.V());
+	}
+	
+	@Test
+	public void testAdj(){
+		dag dag1 = new dag(5);
+		
+		Bag<Integer> testBag = new Bag<Integer>();
+		
+		//Not quite sure how to test for iterable/bag returns. Will need to check this when code is written.
+		assertEquals("Testing empty adj table", testBag, dag1.adj(0));
+		
+		testBag.add(2);
+		dag1.addEdge(1, 2);
+		
+		assertEquals("Testing single edge adj table", testBag, dag1.adj(1));
+		
+		Bag<Integer> testBag2 = new Bag<Integer>();
+		
+		testBag2.add(3);
+		testBag2.add(4);
+		
+		dag1.addEdge(2, 3);
+		dag1.addEdge(2, 4);
+		
+		assertEquals("Testing multi-edge adj table", testBag, dag1.adj(2));
 	}
 }
