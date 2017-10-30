@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 /*
  * public class Digraph
  * 
@@ -22,15 +21,26 @@ public class dag {
 
 	private final int V;
 	private final Bag<Integer>[] adj;
+	
+	// For LCA
+	private final Bag<Integer>[] reverseAdj;
+
 
 public dag(int V)
 {
 	this.V = V;
 	adj = (Bag<Integer>[]) new Bag[V];
 	
+	// For LCA
+	reverseAdj = (Bag<Integer> []) new Bag[V];
+	
 	for (int v = 0; v < V; v++)
 	{
 		adj[v] = new Bag<Integer>();
+		
+	
+		//For LCA
+		reverseAdj[v] = new Bag<Integer>();
 	}
 }
 
@@ -42,10 +52,11 @@ public boolean addEdge(int v, int w)
 	if(v >= this.V || w >= this.V || v < 0 || w < 0){
 		return false;
 	}
-	DirectedDFS dfsObject = new DirectedDFS(this, w);
+	
 
-	if(v != w && !dfsObject.visited(v)){
+	if(v != w && !hasPath(w, v)){
 		adj[v].add(w);
+		reverseAdj[w].add(v);
 		return true;
 	}	
 	else{
@@ -60,15 +71,115 @@ public int V(){
 public Iterable<Integer> adj(int v)
 { return adj[v]; }
 
+public Iterable<Integer> reverseAdj(int v)
+{ return reverseAdj[v]; }
 
-//Class to create a depth first search object on a directed graph.
+public boolean hasPath(int x, int y){
+	DirectedDFS dfsObj = new DirectedDFS(this, x);
+	return dfsObj.visited(y);
+}
+
+public Iterable<Integer> lowestCommonAncestor(int x, int y)
+{
+	
+	//mark all X's parents
+	//For each of X's parents, check if Y is child
+	//if it is
+	//{
+	// get distance to X
+	// distance to Y	
+	// if max(xDist, yDist) < currentMaxDist
+	// 		empty bag and put in this node
+	//
+	// if max(xDist, yDist) == currentMaxDist
+	//		add this node to bag
+	//}
+	
+	Bag<Integer> lcas = new Bag<Integer>();
+	int currentMaxDist = Integer.MAX_VALUE;
+	
+	
+	if(x==y || x>=this.V || y>=this.V || x<0 || y<0) { return lcas; } //If invalid input return empty bag.
+	
+	DirectedDFS dfsObject = new DirectedDFS(this, x);
+	dfsObject.reverseDfs(this, x);
+	int xDist, yDist;
+	
+	for(int v = 0; v < this.V; v++)
+	{
+	
+		if(dfsObject.revVisited(v) && hasPath(v, y))
+		{
+			xDist = getDistance(v, x);
+			yDist = getDistance(v, y);
+			
+			//System.out.println("Node " + v + ". xDist " + xDist + ". yDist " + yDist);
+			if(Integer.max(xDist, yDist) < currentMaxDist)
+			{
+				//System.out.println("Resetting Bag - adding node " + v);
+				
+				lcas = new Bag<Integer>();
+				lcas.add(v);
+				currentMaxDist = Integer.max(xDist, yDist);
+			}
+			else if(Integer.max(xDist, yDist) == currentMaxDist)
+			{
+				//System.out.println("Adding node " + v);
+				lcas.add(v);
+				currentMaxDist = Integer.max(xDist, yDist);
+			}
+		}
+	}
+	return lcas;
+}
+
+private int getDistance(int x, int target)
+{
+    
+		if( x == target) { return 0; }
+		else {
+	        Queue<Integer> q = new LinkedList<Integer>();
+	        int[] distTo = new int[this.V];
+	        boolean[] marked = new boolean[this.V];
+	//        boolean finished = false;
+	        
+	        for (int v = 0; v < this.V(); v++)
+	        {   distTo[v] = Integer.MAX_VALUE;}
+	        
+	        distTo[x] = 0;
+	        marked[x] = true;
+	        q.add(x);
+	
+	        while (!q.isEmpty()) {
+	            int v = q.remove();
+	            for (int w : this.adj(v)) {
+	                if (!marked[w]) {
+	                	
+	                	distTo[w] = distTo[v] + 1;
+	                    marked[w] = true;
+	                    
+//	                    if(w == target){
+//	                    	finished = true;
+//	                    }                	    
+	                    q.add(w);
+	                }
+	            }
+	        }
+	        
+	        return distTo[target];
+		}
+}
+
+// Class to create a depth first search object on a directed graph.
 private class DirectedDFS
 {
 	private boolean[] marked;
+	private boolean[] revMarked;
 	
 	public DirectedDFS(dag G, int s)
 	{
 		marked = new boolean[G.V()];
+		revMarked = new boolean[G.V()];
 		dfs(G, s);
 	}
 	
@@ -81,9 +192,20 @@ private class DirectedDFS
 		if (!marked[w]) dfs(G, w);
 	}
 	
+	
+	//dfs against the flow of direction - used to find all parents.
+	private void reverseDfs(dag G, int v)
+	{
+		revMarked[v] = true;
+		for (int w : G.reverseAdj(v))
+		if (!revMarked[w]) reverseDfs(G, w);
+	}
+	
 	public boolean visited(int v)
 	{ return marked[v]; }
 	
+	public boolean revVisited(int v)
+	{ return revMarked[v]; }
 }
 
 }
