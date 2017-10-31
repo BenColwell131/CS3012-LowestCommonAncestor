@@ -1,22 +1,5 @@
 import java.util.*;
 
-/*
- * public class Digraph
- * 
- * Digraph(int V) create an empty digraph with V vertices
- *  
- * void addEdge(int v, int w) add a directed edge v->w
- * 
- * Iterable<Integer> adj(int v) vertices pointing from v
- * 
- * int V() number of vertices
- * 
- * int E() number of edges
- *  
- * String toString() string representation
- * 
- */
-
 public class dag {
 
 	private final int V;

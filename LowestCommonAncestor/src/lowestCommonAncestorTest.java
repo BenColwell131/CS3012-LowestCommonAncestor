@@ -231,38 +231,8 @@ public class lowestCommonAncestorTest {
 	}
 	
 	
-	//Tests for directed acyclic graph implementation. Going to need the following functions:
-	// new dag()
-	// printDag()
-	// addEdge(int x, int y) - will need to check if it would make a cycle (true/false return maybe?)
-	// V() - returns num vertices - will just be a public func. to return private variable. 
-	// adj(int v) - will return adjacency table of node v. Maybe as an iterable?
-	// lowestCommonAncestor(int v) - could have multiple lcas - iterable again?
-	// Will also probably need some sort of search class - dfs/topological sort/bfs. 
-	// But this can be private and so should be tested via lca.
-	
-//	@Test
-//	public void testPrintDag(){
-//		dag dag1 = new dag(5);
-//		// Should have vertices 0,1,2,3,4.
-//		
-//		//Not fully sure how it will print - will depend on how I setup the dag obj. But more than likely
-//		//it will be a series of adjacency bags each printed on a line.
-//		
-//		assertEquals("Testing printDag on a no-edge dag", "0: \n1: \n2: \n3: \n4: ", dag.testPrintDag());
-//		
-//		dag1.addEdge(0, 1);
-//		
-//		assertEquals("Testing printDag on a single edge dag", "0: 1.\n1: .\n2: .\n3: .\n4: .", dag.testPrintDag());
-//		
-//		dag1.addEdge(0, 2);
-//		dag1.addEdge(3, 4);
-//		dag1.addEdge(4, 2);
-//		dag1.addEdge(4, 1);
-//		
-//		assertEquals("Testing printDag on a multi-edge dag", "0: 1, 2.\n1: .\n2: .\n3: 4.\n4: 2, 1.", dag.testPrintDag());
-//	}
-	
+	//Tests for directed acyclic graph implementation. 
+
 	@Test
 	public void testAddEdge(){
 		dag dag1 = new dag(5);
