@@ -20,27 +20,27 @@ import java.util.*;
 public class dag {
 
 	private final int V;
-	private final Bag<Integer>[] adj;
+	private final ArrayList<Integer>[] adj;
 	
 	// For LCA
-	private final Bag<Integer>[] reverseAdj;
+	private final ArrayList<Integer>[] reverseAdj;
 
 
 public dag(int V)
 {
 	this.V = V;
-	adj = (Bag<Integer>[]) new Bag[V];
+	adj = (ArrayList<Integer>[]) new ArrayList[V];
 	
 	// For LCA
-	reverseAdj = (Bag<Integer> []) new Bag[V];
+	reverseAdj = (ArrayList<Integer>[]) new ArrayList[V];
 	
 	for (int v = 0; v < V; v++)
 	{
-		adj[v] = new Bag<Integer>();
+		adj[v] = new ArrayList<Integer>();
 		
 	
 		//For LCA
-		reverseAdj[v] = new Bag<Integer>();
+		reverseAdj[v] = new ArrayList<Integer>();
 	}
 }
 
@@ -54,7 +54,7 @@ public boolean addEdge(int v, int w)
 	}
 	
 
-	if(v != w && !hasPath(w, v)){
+	if(v != w && !hasPath(w, v) && !adj[v].contains(w)){
 		adj[v].add(w);
 		reverseAdj[w].add(v);
 		return true;
@@ -68,10 +68,10 @@ public int V(){
 	return V;
 }
 
-public Iterable<Integer> adj(int v)
+public ArrayList<Integer> adj(int v)
 { return adj[v]; }
 
-public Iterable<Integer> reverseAdj(int v)
+public ArrayList<Integer> reverseAdj(int v)
 { return reverseAdj[v]; }
 
 public boolean hasPath(int x, int y){
@@ -79,7 +79,7 @@ public boolean hasPath(int x, int y){
 	return dfsObj.visited(y);
 }
 
-public Iterable<Integer> lowestCommonAncestor(int x, int y)
+public ArrayList<Integer> lowestCommonAncestor(int x, int y)
 {
 	
 	//mark all X's parents
@@ -95,7 +95,7 @@ public Iterable<Integer> lowestCommonAncestor(int x, int y)
 	//		add this node to bag
 	//}
 	
-	Bag<Integer> lcas = new Bag<Integer>();
+	ArrayList<Integer> lcas = new ArrayList<Integer>();
 	int currentMaxDist = Integer.MAX_VALUE;
 	
 	
@@ -113,18 +113,14 @@ public Iterable<Integer> lowestCommonAncestor(int x, int y)
 			xDist = getDistance(v, x);
 			yDist = getDistance(v, y);
 			
-			//System.out.println("Node " + v + ". xDist " + xDist + ". yDist " + yDist);
 			if(Integer.max(xDist, yDist) < currentMaxDist)
-			{
-				//System.out.println("Resetting Bag - adding node " + v);
-				
-				lcas = new Bag<Integer>();
+			{		
+				lcas = new ArrayList<Integer>();
 				lcas.add(v);
 				currentMaxDist = Integer.max(xDist, yDist);
 			}
 			else if(Integer.max(xDist, yDist) == currentMaxDist)
 			{
-				//System.out.println("Adding node " + v);
 				lcas.add(v);
 				currentMaxDist = Integer.max(xDist, yDist);
 			}
@@ -141,7 +137,6 @@ private int getDistance(int x, int target)
 	        Queue<Integer> q = new LinkedList<Integer>();
 	        int[] distTo = new int[this.V];
 	        boolean[] marked = new boolean[this.V];
-	//        boolean finished = false;
 	        
 	        for (int v = 0; v < this.V(); v++)
 	        {   distTo[v] = Integer.MAX_VALUE;}
@@ -158,9 +153,6 @@ private int getDistance(int x, int target)
 	                	distTo[w] = distTo[v] + 1;
 	                    marked[w] = true;
 	                    
-//	                    if(w == target){
-//	                    	finished = true;
-//	                    }                	    
 	                    q.add(w);
 	                }
 	            }

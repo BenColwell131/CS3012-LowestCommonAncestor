@@ -284,47 +284,41 @@ public class lowestCommonAncestorTest {
 	public void testV(){
 		//Not much to test - should return the num of vertices.
 		dag dag1 = new dag(5);
-		assertEquals("Testing V()", 4, dag1.V());
+		assertEquals("Testing V()", 5, dag1.V());
 	}
 	
 	@Test
 	public void testAdj(){
 		dag dag1 = new dag(5);
 		
-		Bag<Integer> testBag = new Bag<Integer>();
-		//Not quite sure how to test for iterable/bag returns. Will need to check this when code is written.
+		assertTrue("Testing empty adj list", dag1.adj(0).isEmpty());
 		
-		HashSet<Integer> expectedResult = null;
-		//HashSet<Integer> actualResult;
+		ArrayList<Integer> expectedResult = new ArrayList<Integer>();
 		
-		Iterable<Integer> actualResult = dag1.adj(0);
+		//Testing single edge adj list
+		expectedResult.add(2);
+		dag1.addEdge(1, 2);
 		
-		for(Integer i : actualResult){
-			assertTrue(expectedResult.contains(i));
+		assertTrue("Testing single edge adj list", dag1.adj(1).size() == expectedResult.size());
+		for(int i : expectedResult){
+			assertTrue("Testing single edge adj list", dag1.adj(1).contains(i));
 		}
 		
-		System.out.println(actualResult.toString());
+		expectedResult.clear();
 		
-		//assertTrue("Testing empty adj table", testBag.equals(dag1.adj(0)));
-		//assertNull("Testing empty adj table", dag1.adj(0));
-					
-//		testBag.add(2);
-//		dag1.addEdge(1, 2);
-//		
-//		assertTrue("Testing single edge adj table", testBag.equals(dag1.adj(1)));
-//		
-//		Bag<Integer> testBag2 = new Bag<Integer>();
-//		
-//		testBag2.add(3);
-//		testBag2.add(4);
-//		
-//		dag1.addEdge(2, 3);
-//		dag1.addEdge(2, 4);
-//		
-//		assertTrue("Testing multi-edge adj table", testBag.equals(dag1.adj(2)));
+		expectedResult.add(3);
+		expectedResult.add(4);
+		
+		dag1.addEdge(2, 3);
+		dag1.addEdge(2, 4);
+		
+		assertTrue("Testing multi-edge adj list", dag1.adj(2).size() == expectedResult.size());
+		for(int i : expectedResult){
+			assertTrue("Testing multi-edge adj list", dag1.adj(2).contains(i));
+		}
 	}
 	
-	@Test
+//	@Test
 	public void testDagLowestCommonAncestor(){
 		dag testDag1 = new dag(5);
 		
@@ -333,10 +327,17 @@ public class lowestCommonAncestorTest {
 		testDag1.addEdge(2, 3);
 		testDag1.addEdge(3, 4);
 		
-		Bag<Integer> testBag1 = new Bag<Integer>();
-		testBag1.add(0);
+		ArrayList<Integer> expectedResult = new ArrayList<Integer>();
+		expectedResult.add(0);
+				
+		assertTrue("Testing single lca return", testDag1.lowestCommonAncestor(4,1).size() == expectedResult.size());
+		for(int i : expectedResult){
+			assertTrue("Testing single lca return", testDag1.lowestCommonAncestor(4,1).contains(i));
+		}
 		
-		assertEquals("Testing single lca return", testBag1, testDag1.lowestCommonAncestor(4, 1));
+		
+		
+		
 		
 		dag testDag2 = new dag(7);
 
@@ -349,17 +350,19 @@ public class lowestCommonAncestorTest {
 		testDag2.addEdge(3, 6);
 		testDag2.addEdge(4, 6);
 		
-		Bag<Integer> testBag2 = new Bag<Integer>();
-		testBag2.add(2);
-		testBag2.add(3);
-		
-		assertEquals("Testing multiple lca return", testBag2, testDag2.lowestCommonAncestor(5, 6));
-		
-		Bag<Integer> testBag3 = new Bag<Integer>();
-		
+		expectedResult.clear();
+		expectedResult.add(2);
+		expectedResult.add(3);
+				
+		assertTrue("Testing mutliple lca return", testDag1.lowestCommonAncestor(5,6).size() == expectedResult.size());
+		for(int i : expectedResult){
+			assertTrue("Testing mutliple lca return", testDag1.lowestCommonAncestor(5,6).contains(i));
+		}
+				
 		//Testing non present vertices input
-		assertEquals("Testing negative input", testBag3, testDag2.lowestCommonAncestor(-2, -1));
+		assertTrue("Testing negative input", testDag2.lowestCommonAncestor(-2, -1).isEmpty());
 		
-		assertEquals("Testing out of range input", testBag3, testDag2.lowestCommonAncestor(2457, 987));		
+		assertTrue("Testing out of range input", testDag2.lowestCommonAncestor(2457, 987).isEmpty());		
+	
 	}	
 }
